@@ -1,10 +1,11 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CoffeeError } from 'src/common/constants/service.message';
+import { CoffeeError } from '../../common/constants/service.message';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Coffee, ICoffee } from './coffee.schema';
-import { logError } from 'src/utils/error';
-import { IFindOptions } from 'src/common/interfaces/query';
+import { logError } from '../../utils/error';
+import { IFindOptions } from '../../common/interfaces/query';
+import { CreateCoffeeDto } from './coffee.dto';
 
 type SearchOptions = Partial<ICoffee>;
 
@@ -13,7 +14,7 @@ export class CoffeeService {
     @InjectModel(Coffee.name) private readonly coffeeModel: Model<Coffee>,
   ) {}
 
-  async createOne(data: ICoffee): Promise<Coffee> {
+  async createOne(data: CreateCoffeeDto): Promise<Coffee> {
     return await this.coffeeModel.create(data).catch(error => {
       logError(error);
       throw new InternalServerErrorException(CoffeeError.CANNOT_CREATE);
